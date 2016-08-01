@@ -9,7 +9,6 @@ var concat = require('gulp-concat'),
     rename = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
     typescript = require("gulp-typescript"),
-    typings = require("gulp-typings"),
     uglify = require('gulp-uglify');
 
 // common
@@ -30,9 +29,6 @@ var appJsConfig = jsRoot + "/tsconfig.json",
     appJsSrc = [appJsRoot + '/**/*.ts'],
     appMinJs = 'app.min.js',
     appJs = appMinJs.replace('.min', '');
-
-// typings
-var typingsConfig = "./typings.json";
 
 // app.css variables
 var appMinCss = 'app.min.css',
@@ -127,7 +123,7 @@ gulp.task(settingsJs, [settingsJs + "_setup"], function () {
 });
 
 // app.js: convert and bundle ts files into app.js + minify into app.min.js
-gulp.task(appJs, ["typings"], function () {
+gulp.task(appJs, function () {
 
     var project = typescript.createProject(appTsConfig, { outFile: appJs });
 
@@ -140,12 +136,6 @@ gulp.task(appJs, ["typings"], function () {
         .on('error', errorHandler)
         .pipe(sourcemaps.write('./', { sourceRoot: appJsSourceMapRoot }))
         .pipe(gulp.dest(appJsRoot));
-});
-
-gulp.task("typings", function () {
-
-    return gulp.src(typingsConfig)
-        .pipe(typings());
 });
 
 // app.css: concat all into app.css + minify all into app.min.css
